@@ -1,3 +1,13 @@
+FROM ubuntu:16.04 as fetch
+
+RUN set -x \
+    && apt-get update && apt-get install -y \
+        git
+
+WORKDIR /tmp
+RUN git clone --depth 1 https://github.com/weizhouUMICH/SAIGE.git
+
+
 FROM ubuntu:16.04
 
 ENV SRC_DIR=/tmp/saige-src
@@ -8,7 +18,6 @@ RUN set -x \
         build-essential \
         cmake \
         curl \
-        git \
         libboost-all-dev \
         python-pip \
         software-properties-common \
@@ -24,15 +33,24 @@ WORKDIR ${SRC_DIR}
 COPY install_packages.R ${SRC_DIR}
 RUN Rscript install_packages.R
 
-RUN git clone --depth 1 https://github.com/weizhouUMICH/SAIGE.git
-RUN rm -rf ${SRC_DIR}/SAIGE/thirdParty/cget \
-    && rm ${SRC_DIR}/SAIGE/src/*.o \
-    && rm ${SRC_DIR}/SAIGE/src/*.so
+COPY --from=fetch /tmp/SAIGE/R ./R
+COPY --from=fetch /tmp/SAIGE/build ./build
+COPY --from=fetch /tmp/SAIGE/extdata ./extdata
+COPY --from=fetch /tmp/SAIGE/man ./man
+COPY --from=fetch /tmp/SAIGE/src ./src
+COPY --from=fetch /tmp/SAIGE/DESCRIPTION .
+COPY --from=fetch /tmp/SAIGE/INDEX .
+COPY --from=fetch /tmp/SAIGE/NAMESPACE .
+COPY --from=fetch /tmp/SAIGE/thirdParty/bgen ./thirdParty/bgen
+COPY --from=fetch /tmp/SAIGE/thirdParty/zlib-1.2.8 ./thirdParty/zlib-1.2.8
+COPY --from=fetch /tmp/SAIGE/thirdParty/requirements.txt ./thirdParty/requirements.txt
 
-RUN cget install -DUSE_CXX3_ABI=ON -DCMAKE_C_FLAGS="-fPIC" -DCMAKE_CXX_FLAGS="-fPIC" --prefix ${SRC_DIR}/SAIGE/thirdParty/cget -f ${SRC_DIR}/SAIGE/thirdParty/requirements.txt
-RUN R CMD INSTALL --build ${SRC_DIR}/SAIGE
+RUN rm ${SRC_DIR}/src/*.o && rm ${SRC_DIR}/src/*.so
 
-RUN cp ${SRC_DIR}/SAIGE/extdata/step1_fitNULLGLMM.R ${SRC_DIR}/SAIGE/extdata/step2_SPAtests.R /usr/local/bin/ \
+RUN cget install -DUSE_CXX3_ABI=ON -DCMAKE_C_FLAGS="-fPIC" -DCMAKE_CXX_FLAGS="-fPIC" --prefix ${SRC_DIR}/thirdParty/cget -f ${SRC_DIR}/thirdParty/requirements.txt
+RUN R CMD INSTALL --build ${SRC_DIR}
+
+RUN cp ${SRC_DIR}/extdata/step1_fitNULLGLMM.R ${SRC_DIR}/extdata/step2_SPAtests.R /usr/local/bin/ \
     && rm -rf ${SRC_DIR}
 
 WORKDIR /
