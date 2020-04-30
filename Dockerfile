@@ -2,10 +2,10 @@ FROM ubuntu:16.04 as fetch
 
 RUN set -x \
     && apt-get update && apt-get install -y \
-        curl
+        wget
 
 WORKDIR /tmp
-RUN curl -O https://github.com/weizhouUMICH/SAIGE/archive/0.36.2.tar.gz 
+RUN wget https://github.com/weizhouUMICH/SAIGE/archive/0.36.2.tar.gz 
 RUN tar -zxvf 0.36.2.tar.gz
 RUN mv SAIGE-0.36.2/ SAIGE/
 
