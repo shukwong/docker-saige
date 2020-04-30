@@ -5,8 +5,9 @@ RUN set -x \
         curl
 
 WORKDIR /tmp
-RUN curl -O https://github.com/weizhouUMICH/SAIGE/archive/0.36.2.tar.gz 
-RUN tar -zxvf SAIGE_0.36.2_R_x86_64-pc-linux-gnu.tar.gz
+RUN curl -o https://github.com/weizhouUMICH/SAIGE/archive/0.36.2.tar.gz 
+RUN tar -zxvf 0.36.2.tar.gz
+RUN mv SAIGE-0.36.2/ SAIGE/
 
 
 FROM ubuntu:16.04
