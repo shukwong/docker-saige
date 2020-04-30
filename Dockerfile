@@ -44,7 +44,7 @@ COPY --from=fetch /tmp/SAIGE/DESCRIPTION .
 COPY --from=fetch /tmp/SAIGE/INDEX .
 COPY --from=fetch /tmp/SAIGE/NAMESPACE .
 COPY --from=fetch /tmp/SAIGE/thirdParty/bgen ./thirdParty/bgen
-COPY --from=fetch /tmp/SAIGE/thirdParty/zlib-1.2.8 ./thirdParty/zlib-1.2.8
+COPY --from=fetch /tmp/SAIGE/thirdParty/cget ./thirdParty/cget
 COPY --from=fetch /tmp/SAIGE/thirdParty/requirements.txt ./thirdParty/requirements.txt
 
 RUN rm ${SRC_DIR}/src/*.o && rm ${SRC_DIR}/src/*.so
