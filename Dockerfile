@@ -5,7 +5,8 @@ RUN set -x \
         git
 
 WORKDIR /tmp
-RUN git clone --depth 1 https://github.com/weizhouUMICH/SAIGE.git
+RUN wget https://github.com/weizhouUMICH/SAIGE/releases/download/0.36.2/SAIGE_0.36.2_R_x86_64-pc-linux-gnu.tar.gz 
+RUN tar -zxvf SAIGE_0.36.2_R_x86_64-pc-linux-gnu.tar.gz
 
 
 FROM ubuntu:16.04
