@@ -5,7 +5,7 @@ RUN set -x \
         curl
 
 WORKDIR /tmp
-RUN curl -o https://github.com/weizhouUMICH/SAIGE/archive/0.36.2.tar.gz 
+RUN curl -O https://github.com/weizhouUMICH/SAIGE/archive/0.36.2.tar.gz 
 RUN tar -zxvf 0.36.2.tar.gz
 RUN mv SAIGE-0.36.2/ SAIGE/
 
