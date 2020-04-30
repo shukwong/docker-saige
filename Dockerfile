@@ -2,7 +2,7 @@ FROM ubuntu:16.04 as fetch
 
 RUN set -x \
     && apt-get update && apt-get install -y \
-        git
+        curl
 
 WORKDIR /tmp
 RUN curl -O https://github.com/weizhouUMICH/SAIGE/releases/download/0.36.2/SAIGE_0.36.2_R_x86_64-pc-linux-gnu.tar.gz 
